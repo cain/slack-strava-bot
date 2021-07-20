@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-strava-docs.txt
+strava.txt
 
 # dependencies
 /node_modules
