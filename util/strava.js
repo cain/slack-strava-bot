@@ -19,7 +19,7 @@ export async function exchangeToken(code) {
         res(JSON.stringify(response.data));
       })
       .catch(function (error) {
-        console.log(error);
+        console.log(error.data.errors);
         rej(error);
       });
   })
