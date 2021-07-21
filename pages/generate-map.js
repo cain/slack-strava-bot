@@ -29,12 +29,6 @@ export default function Home() {
       zoom: 14.5,
       preserveDrawingBuffer: true,
     });
-
-    // var dpi = 300;
-    // Object.defineProperty(window, 'devicePixelRatio', {
-    //     get: function() {return dpi / 96}
-    // });
-
     map.on('load', function () {
       map.addSource('route', {
       'type': 'geojson',
