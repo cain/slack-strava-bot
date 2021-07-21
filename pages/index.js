@@ -12,7 +12,6 @@ export default function Home() {
   const { code, scope } = router.query
 
   useEffect(() => {
-    debugger;
     if (code) {
       setStatus('authorizing');
       if(scope.indexOf('read,activity:read') > -1) {
