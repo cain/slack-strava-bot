@@ -3,12 +3,12 @@ const { sendMessage } = require('../../util/slack');
 
 export default async function handler(req, res) {
   exchangeToken(req.query.code)
-    .then((response) => {
+    .then(async(response) => {
 
       // save token in db
 
       // msg slack
-      sendMessage({ message: response });
+      await sendMessage({ message: response });
       console.log(response);
 
       // response
