@@ -1,7 +1,6 @@
 const { WebClient } = require('@slack/web-api');
 
-  
-export function sendMessage() {
+export async function sendMessage({ message }) {
   // Create a new instance of the WebClient class with the token read from your environment variable
   const web = new WebClient(process.env.SLACK_TOKEN);
   // The current date
@@ -9,7 +8,7 @@ export function sendMessage() {
 
   await web.chat.postMessage({
     channel: '#general',
-    text: `The current time is ${currentTime}`,
+    text: `${message}`,
   });
 }
 

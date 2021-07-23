@@ -27,6 +27,8 @@ export default function Home() {
       }
     }
   }, [code, scope])
+
+
   return (
     <div className={styles.container}>
       <Head>
@@ -36,6 +38,8 @@ export default function Home() {
       </Head>
 
       homepage
+
+      <a href="https://www.strava.com/oauth/authorize?client_id=44322&response_type=code&redirect_uri=http://slack-strava-bot.vercel.app&approval_prompt=force&scope=activity:read_all,activity:read">Auth strava</a>
 
       <p>status: { status }</p>
 

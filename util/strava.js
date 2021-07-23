@@ -12,6 +12,18 @@ export async function exchangeToken(code) {
         grant_type: 'authorization_code',
       }
     };
+
+    /*
+    *
+    expires_at
+      integer	The number of seconds since the epoch when the provided access token will expire
+    expires_in
+      integer	Seconds until the short-lived access token will expire
+    refresh_token
+      string	The refresh token for this user, to be used to get the next access token for this user. Please expect that this value can change anytime you retrieve a new access token. Once a new refresh token code has been returned, the older code will no longer work.
+    athlete
+      string	A summary of athlete information
+    */
     
     axios(config)
       .then(function (response) {
