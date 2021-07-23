@@ -26,7 +26,7 @@ export default function Home() {
         setStatus('invalid-scope');
       }
     }
-  }, [code])
+  }, [code, scope])
   return (
     <div className={styles.container}>
       <Head>

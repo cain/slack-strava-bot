@@ -1,7 +1,7 @@
 const { WebClient } = require('@slack/web-api');
 const { getActivity } = require('../../util/strava');
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   console.log(req.method)
   if(req.method === 'GET') {
       // Your verify token. Should be a random string.

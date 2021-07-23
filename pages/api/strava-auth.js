@@ -1,6 +1,6 @@
 const { exchangeToken } = require('../../util/strava');
 
-export default async (req, res) => {
+export default async function handler(req, res) {
   exchangeToken(req.query.code)
     .then((response) => {
 
