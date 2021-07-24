@@ -2,7 +2,7 @@ var axios = require('axios');
 
 export async function exchangeToken(code) {
   return new Promise((res, rej) => {
-    var config = {
+    const config = {
       method: 'post',
       url: 'https://www.strava.com/oauth/token',
       data: {
@@ -37,23 +37,23 @@ export async function exchangeToken(code) {
   })
 }
 
-export async function getActivity() {
+export async function getActivity(id) {
   return new Promise((res, rej) => {
     var config = {
       method: 'get',
-      url: 'https://www.strava.com/api/v3/activities/5651244361?include_all_efforts=',
+      url: `https://www.strava.com/api/v3/activities/${id}?include_all_efforts=`,
       headers: { 
-        'Authorization': 'Bearer 5c027849983ae85412c5589e8d6b689af1b528e8'
+        'Authorization': 'Bearer 6336adee8aa7c88aaffa95c7b895b661ff8749f5'
       }
     };
     
     axios(config)
       .then(function (response) {
-        console.log('RESPONSE', JSON.stringify(response.data));
-        res(JSON.stringify(response.data));
+        // console.log('RESPONSE', JSON.stringify(response.data));
+        res(response.data);
       })
       .catch(function (error) {
-        console.log(error);
+        // console.log(error);
         rej(error);
       });
   })

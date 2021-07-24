@@ -1,16 +1,27 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter()
+  const [error, setError] = useState(false);
+  const { polyline } = router.query
+
   useEffect(() => {
+    setError(false)
     // Update the document title using the browser API
     var mapboxgl = require('mapbox-gl/dist/mapbox-gl.js');
 
-    var polyline = require('@mapbox/polyline');
+    if(!polyline) {
+      setError('No polyline')
+      return;
+    }
 
+    var mapboxPolyline = require('@mapbox/polyline');
     // returns an array of lat, lon pairs
-    const pairs = polyline.toGeoJSON('vw}mEyuvy[Ok@OmA?UBGLEJA|AIVK^e@xCuClAcAVGzBHnBBPJLf@Th@f@d@d@Vd@@vD`@`@MZc@Ns@By@Eg@[_@}BOe@QsAq@QEs@Ac@McAiAo@yA_@i@MOK@OHGJGl@Q`AoAlC?ZL`@nA?b@Bl@JpB@FJNn@Rd@z@r@NF`@AdALpATd@?TMLQPi@D_@?u@I]GMa@We@G}@Gc@M}Aw@sAEc@Si@q@Yc@Yu@We@[_@IAOFGHMfAOx@oAdCAJDTA`@gCzBa@b@eBdBa@LqAF]?GEIOEk@Cu@BcANi@ZU^Sf@Mh@@ZTZf@^|@\\ZJBBAPO`BcBPW`@SfCPl@Gl@?^BPTTz@\\\\b@Z`@NX?x@JhBXP?VKVg@Fi@Bu@Ko@W[[GaAAg@KiAu@g@WqAAYOmA_Bg@aAiAyAWa@WW_@Qe@M_BWUIc@w@e@k@Qa@EUEgAOc@g@s@QIc@Ky@Gc@Je@`@KRSp@El@@NLj@T\\PN`@RPD`ABRAb@Kd@[To@Bu@Km@[o@e@a@]Im@Gg@?e@HWNMNUfACn@Jv@LN');
+    const pairs = mapboxPolyline.toGeoJSON(polyline);
+    // const pairs = polyline.toGeoJSON('vw}mEyuvy[Ok@OmA?UBGLEJA|AIVK^e@xCuClAcAVGzBHnBBPJLf@Th@f@d@d@Vd@@vD`@`@MZc@Ns@By@Eg@[_@}BOe@QsAq@QEs@Ac@McAiAo@yA_@i@MOK@OHGJGl@Q`AoAlC?ZL`@nA?b@Bl@JpB@FJNn@Rd@z@r@NF`@AdALpATd@?TMLQPi@D_@?u@I]GMa@We@G}@Gc@M}Aw@sAEc@Si@q@Yc@Yu@We@[_@IAOFGHMfAOx@oAdCAJDTA`@gCzBa@b@eBdBa@LqAF]?GEIOEk@Cu@BcANi@ZU^Sf@Mh@@ZTZf@^|@\\ZJBBAPO`BcBPW`@SfCPl@Gl@?^BPTTz@\\\\b@Z`@NX?x@JhBXP?VKVg@Fi@Bu@Ko@W[[GaAAg@KiAu@g@WqAAYOmA_Bg@aAiAyAWa@WW_@Qe@M_BWUIc@w@e@k@Qa@EUEgAOc@g@s@QIc@Ky@Gc@Je@`@KRSp@El@@NLj@T\\PN`@RPD`ABRAb@Kd@[To@Bu@Km@[o@e@a@]Im@Gg@?e@HWNMNUfACn@Jv@LN');
 
     const maxX = pairs.coordinates.reduce((acc, val) => (val[0] > acc || !acc) ? val[0] : acc, undefined)
     const minX = pairs.coordinates.reduce((acc, val) => (val[0] < acc || !acc) ? val[0] : acc, undefined)
@@ -61,7 +72,7 @@ export default function Home() {
       setTimeout(() => {
       }, 5000)
     });
-  });
+  }, [polyline]);
   return (
     <div className={styles.container}>
       <Head>
@@ -70,6 +81,7 @@ export default function Home() {
         <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
       </Head>
 
+      {error && <div>{error}</div>}
       <div id="map" />
 
     </div>

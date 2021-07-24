@@ -1,4 +1,4 @@
-import { generateMap } from '../../functions/screenshot'
+import { generateMap } from '../../functions/screenshot.tsx'
 
 export default async function handler (req, res) {
   console.log(req.method)
