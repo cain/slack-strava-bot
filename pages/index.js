@@ -21,15 +21,17 @@ export default function Home() {
         axios.get('/api/strava-auth', { params: { code } })
           .then(() => {
             setStatus('success');
+            router.replace('/');
           })
           .catch(() => {
             setStatus('fail');
+            router.replace('/');
           })
       } else {
         setStatus('invalid-scope');
       }
     }
-  }, [code, scope])
+  }, [code, router, scope])
 
 
   return (
