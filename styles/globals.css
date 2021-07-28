@@ -15,5 +15,11 @@ a {
   box-sizing: border-box;
 }
 
+a {
+  padding: 1rem;
+  border: 1px solid grey;
+  border-radius: 3px;
+}
+
 
 #map { width: 800px; height: 500px; }

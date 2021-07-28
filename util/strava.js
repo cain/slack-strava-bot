@@ -27,23 +27,29 @@ export async function exchangeToken(code) {
     
     axios(config)
       .then(function (response) {
-        console.log('RESPONSE', JSON.stringify(response.data));
-        res(JSON.stringify(response.data));
+        // console.log('RESPONSE', JSON.stringify(response.data));
+        res(response.data);
       })
       .catch(function (error) {
-        console.log(error.response.data.errors);
+        // console.log(error.response.data.errors);
         rej(error);
       });
   })
 }
 
-export async function getActivity(id) {
+export async function getActivity(id, token) {
   return new Promise((res, rej) => {
+
+    if(!id || !token) {
+      rej(new Error('Id or token not valid'));
+      return;
+    }
+
     var config = {
       method: 'get',
       url: `https://www.strava.com/api/v3/activities/${id}?include_all_efforts=`,
       headers: { 
-        'Authorization': 'Bearer 6336adee8aa7c88aaffa95c7b895b661ff8749f5'
+        'Authorization': 'Bearer ' + token
       }
     };
     

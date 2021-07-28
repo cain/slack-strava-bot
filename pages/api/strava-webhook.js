@@ -1,6 +1,6 @@
 const { WebClient } = require('@slack/web-api');
 const { getActivity } = require('../../util/strava');
-const { generateMap } = require('../../functions/screenshot');
+const { generateMap } = require('../../util/screenshot');
 
 export default async function handler(req, res) {
   console.log(req.method)
@@ -31,11 +31,9 @@ export default async function handler(req, res) {
     // 1. receive webook
     // 2. get activity data from strava
     const activity = await getActivity(req.body.object_id);
-    console.log(activity.name);
     // 3. create map
     const map = await generateMap({ polyline: activity.map.summary_polyline, id: req.body.object_id });
     // 4. send slack message with data and map
-    console.log(map.path, activity);
 
     // Create a new instance of the WebClient class with the token read from your environment variable
     const web = new WebClient(process.env.SLACK_TOKEN);
@@ -47,8 +45,7 @@ export default async function handler(req, res) {
       text: `EVENT_RECEIVED, ${map.path}, ${activity.name}`,
     });
     
-    res.status(200)
-    res.json({map: map, activity});
+    return res.status(200).json({map: map, activity});
   }
 
 };
