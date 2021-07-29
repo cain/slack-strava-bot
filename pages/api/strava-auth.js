@@ -1,4 +1,4 @@
-const { exchangeToken } = require('../../util/strava');
+import { exchangeToken } from'../../util/strava.tsx';
 const { sendMessage } = require('../../util/slack');
 import { connectToDatabase } from '../../util/mongodb'
 
@@ -7,14 +7,15 @@ export default async function handler(req, res) {
     .then(async (data) => {
 
       // save token in db
+      data.athlete_id = data.athlete.id;
       const { db } = await connectToDatabase();
+      const query = { athlete_id: data.athlete_id };
+      const update = { $set: data };
       await db
-        .collection('tokens')
-        .insertOne(data)
+        .collection('tokens').updateOne(query, update, { upsert: true })
 
       // msg slack
       await sendMessage({ message: `Athlete ${data.athlete.firstname} has joined the slack channel.` });
-      // console.log(data);
 
       // response
       res.statusCode = 200

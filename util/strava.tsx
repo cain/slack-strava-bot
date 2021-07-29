@@ -37,7 +37,7 @@ export async function exchangeToken(code) {
   })
 }
 
-export async function getActivity(id: number, token: string) {
+export async function getActivity(id, token) {
   return new Promise((res, rej) => {
 
     if(!id || !token) {

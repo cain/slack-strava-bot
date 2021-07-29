@@ -29,22 +29,29 @@ export default async function handler(req, res) {
     }
   } else if(req.method === 'POST') {
     console.log("webhook event received!", req.query, req.body);
-    // 1. receive webook
-    // save token in db
+    // 1. save token in db
     const { db } = await connectToDatabase();
     await db
       .collection('webhook')
       .insertOne(req.body)
+
+    const token = await db
+      .collection('tokens')
+      .findOne({ athlete_id: Number(req.body.owner_id) });
+
+    console.log('token', token)
     // 2. get activity data from strava
-    const activity = await getActivity(req.body.object_id, '5cab926de4bea2b81cf31701e085acb3a92f1af1');
+    const activity = await getActivity(req.body.object_id, token.access_token);
+
     // 3. create map
     const map = await generateMap({ polyline: activity.map.summary_polyline, id: req.body.object_id });
-    // 4. send slack message with data and map
     const data = { ...activity, map: map.path };
+
+    // Save activity data
     await db
       .collection('activity')
       .insertOne(data)
-
+    // 4. send slack message with data and map
     // Create a new instance of the WebClient class with the token read from your environment variable
     const web = new WebClient(process.env.SLACK_TOKEN);
     // The current date
