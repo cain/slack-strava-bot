@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    WEB_URL: 'http://localhost:3000',
+    WEB_URL: process.env.APP_ENV === 'production' ? 'https://slack-strava-bot.vercel.app/' : 'http://localhost:3000',
   },
 }
