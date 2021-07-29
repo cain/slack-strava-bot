@@ -4,7 +4,6 @@ import styles from '../styles/Home.module.css'
 import { useEffect, useState } from 'react';
 import { connectToDatabase } from '../util/mongodb'
 import { useRouter } from 'next/router'
-import { JsxEmit } from 'typescript';
 
 export default function Home({ isConnected, activities }) {
   const [status, setStatus] = useState(false);

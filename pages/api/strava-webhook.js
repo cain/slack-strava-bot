@@ -1,7 +1,7 @@
+import { getActivity } from '../../util/strava.tsx';
 const { WebClient } = require('@slack/web-api');
 const { generateMap } = require('../../util/screenshot');
 import { connectToDatabase } from '../../util/mongodb'
-import { getActivity } from '../../util/strava.tsx';
 
 export default async function handler(req, res) {
   console.log(req.method)
