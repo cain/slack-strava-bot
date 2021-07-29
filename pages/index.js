@@ -2,9 +2,10 @@ import Head from 'next/head'
 import axios from 'axios';
 import styles from '../styles/Home.module.css'
 import { useEffect, useState } from 'react';
+import { connectToDatabase } from '../util/mongodb'
 import { useRouter } from 'next/router'
 
-export default function Home() {
+export default function Home({ isConnected }) {
   const [status, setStatus] = useState(false);
 
   const router = useRouter()
@@ -51,6 +52,20 @@ export default function Home() {
 
       {status && <p>status: { status }</p>}
 
+      {isConnected &&
+          <h2 className="subtitle">You are connected to MongoDB</h2>}
+
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+  const { client } = await connectToDatabase()
+  // console.log(client)
+  await client.db("strava-bot").command({ ping: 1 });
+  const isConnected = true;
+
+  return {
+    props: { isConnected },
+  }
 }
