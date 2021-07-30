@@ -4,9 +4,7 @@ const puppeteer = require('puppeteer');
 export function generateMap({ polyline, id }: { polyline: string, id: number }) {
   return new Promise<{ path: string }>(async (res, rej) => {
     try {
-      let chrome = {
-        executablePath: undefined,
-      };
+      let chrome: any = {};
       const config = {
         headless: true,
       }
