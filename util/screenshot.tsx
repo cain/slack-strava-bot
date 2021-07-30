@@ -62,7 +62,7 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
         width: 800,
       });
       
-      await page.waitForFunction('window.mapboxLoaded === true');
+      // await page.waitForFunction('window.mapboxLoaded === true');
       const a = await page.$('#map')
       console.log('find element')
 
