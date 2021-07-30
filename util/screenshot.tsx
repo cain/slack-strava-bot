@@ -21,7 +21,7 @@ async function getBrowserInstance() {
 		ignoreHTTPSErrors: true
 	})
 }
-
+// 87pSozfHW7XgSpykte65jFhBbh8n8ze3pcnCMghjYTfocScb8TauVYXNeCUxouyPefKWx4uRD9ufTEsSxUoqyE4MMFo11oJ
 export function generateMap({ polyline, id }: { polyline: string, id: number }) {
   return new Promise<{ path: string }>(async (res, rej) => {
     try {
@@ -44,10 +44,14 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
       // });
       let browser = null
       browser = await getBrowserInstance()
-
+      console.log('init instance')
       const page = await browser.newPage();
     
       await page.goto(`${process.env.WEB_URL}/generate-map?polyline=` + encodeURI(polyline));
+      console.log('went to page')
+
+      console.log('title: ' + page.title())
+
       await page.setViewport({
         deviceScaleFactor: 2,
         height: 500,
@@ -56,12 +60,19 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
       
       await page.waitForFunction('window.mapboxLoaded === true');
       const a = await page.$('#map')
+      console.log('find element')
+
 
       const path = `public/map/${id}.png`;
       await a.screenshot({ path: path });
+      console.log('screenshot')
     
       await browser.close();
+      console.log('close browser')
+
       res({ path: path });
+      console.log('res path', path)
+
     } catch (error) {
       rej(error);
     }
