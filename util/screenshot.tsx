@@ -2,6 +2,8 @@
 import chromium from 'chrome-aws-lambda'
 
 async function getBrowserInstance() {
+  console.log('getBrowserInstance')
+
 	const executablePath = await chromium.executablePath
 
 	if (!executablePath) {
@@ -42,6 +44,8 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
       //   args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
       //   executablePath: await chrome.executablePath,
       // });
+      console.log('try catch')
+
       let browser = null
       browser = await getBrowserInstance()
       console.log('init instance')
