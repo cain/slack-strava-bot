@@ -1,4 +1,5 @@
 var axios = require('axios');
+import { connectToDatabase } from '../util/mongodb';
 
 export async function exchangeToken(code) {
   return new Promise((res, rej) => {
@@ -37,6 +38,42 @@ export async function exchangeToken(code) {
   })
 }
 
+// Access tokens expire six hours after they are created, so they must be refreshed in order for an application to maintain access to a user’s resources.
+// Every time you get a new access token, we return a new refresh token as well. If you need to make a request, we recommend checking to see if the short-lived access token has expired. If it has expired, request a new short-lived access token with the last received refresh token.
+// https://developers.strava.com/docs/authentication/#refreshing-expired-access-tokens
+export async function refreshToken(tokenObject) {
+  return new Promise((res, rej) => {
+    const config = {
+      method: 'post',
+      url: 'https://www.strava.com/oauth/token',
+      data: {
+        client_id: process.env.STRAVA_CLIENT_ID,
+        client_secret: process.env.STRAVA_SECRET,
+        refresh_token: tokenObject.refresh_token,
+        grant_type: 'refresh_token',
+      }
+    };
+    
+    axios(config)
+      .then(async function (response) {
+        const { data } = response;
+        data.athlete_id = tokenObject.athlete_id;
+
+        const { db } = await connectToDatabase();
+        const query = { athlete_id: data.athlete_id };
+        const update = { $set: data };
+        await db
+          .collection('tokens').updateOne(query, update, { upsert: true })
+
+        res(data);
+      })
+      .catch(function (error) {
+        // console.log(error.response.data.errors);
+        rej(error);
+      });
+  })
+}
+
 export async function getActivity(id, token) {
   return new Promise((res, rej) => {
 
@@ -62,5 +99,31 @@ export async function getActivity(id, token) {
         // console.log(error);
         rej(error);
       });
+  })
+}
+
+export function getAthleteToken(athleteId) {
+  return new Promise(async(res, rej) => {
+    try {
+
+      if(!athleteId) {
+        rej(new Error('Id not valid'));
+        return;
+      }
+      const { db } = await connectToDatabase();
+
+      let token = await db
+        .collection('tokens')
+        .findOne({ athlete_id: Number(athleteId) });
+
+      // refresh token
+      if (token && new Date(token.expires_at * 1000).valueOf() < new Date().valueOf()) {
+        token = await refreshToken(token);
+      }
+      
+      res(token);
+    } catch (error) {
+      rej(error);
+    }
   })
 }

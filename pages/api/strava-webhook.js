@@ -1,4 +1,4 @@
-import { getActivity } from '../../util/strava.tsx';
+import { getActivity, getAthleteToken } from '../../util/strava.tsx';
 const { WebClient } = require('@slack/web-api');
 const { generateMap } = require('../../util/screenshot');
 import { connectToDatabase } from '../../util/mongodb'
@@ -28,16 +28,14 @@ export default async function handler(req, res) {
       res.json('No token supplied')
     }
   } else if(req.method === 'POST') {
-    console.log("webhook event received!", req.query, req.body);
-    // 1. save token in db
+    console.log("webhook event received!", req.body);
+
     const { db } = await connectToDatabase();
     await db
       .collection('webhook')
       .insertOne(req.body)
 
-    const token = await db
-      .collection('tokens')
-      .findOne({ athlete_id: Number(req.body.owner_id) });
+    const token = await getAthleteToken(req.body.owner_id);
 
     console.log('token', token)
     // 2. get activity data from strava
