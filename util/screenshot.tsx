@@ -18,6 +18,7 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
         puppeteer = require('puppeteer');
       }
       const browser = await puppeteer.launch({
+        args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
         executablePath: await chrome.executablePath,
       });
 
