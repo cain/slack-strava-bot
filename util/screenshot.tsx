@@ -4,7 +4,24 @@ const puppeteer = require('puppeteer');
 export function generateMap({ polyline, id }: { polyline: string, id: number }) {
   return new Promise<{ path: string }>(async (res, rej) => {
     try {
-      const browser = await puppeteer.launch();
+      let chrome = {
+        executablePath: undefined,
+      };
+      const config = {
+        headless: true,
+      }
+      let puppeteer;
+      if (process.env.APP_ENV !== 'local') {
+        // running on the Vercel platform.
+        chrome = require('chrome-aws-lambda');
+        puppeteer = require('puppeteer-core');
+      } else {
+        // running locally.
+        puppeteer = require('puppeteer');
+      }
+      const browser = await puppeteer.launch({
+        executablePath: await chrome.executablePath,
+      });
 
       const page = await browser.newPage();
     
