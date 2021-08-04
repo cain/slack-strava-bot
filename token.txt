@@ -1,0 +1,29 @@
+{
+  "token_type": "Bearer",
+  "expires_at": 1627038164,
+  "expires_in": 21351,
+  "refresh_token": "1e6eca86db0356ddee3796af21f2549149f01089",
+  "access_token": "d3278e8dd715b077d4848965f3d660ae7babd116",
+  "athlete": {
+    "id": 31488771,
+    "username": "cain_hall",
+    "resource_state": 2,
+    "firstname": "Cain",
+    "lastname": "Hall",
+    "bio": null,
+    "city": null,
+    "state": null,
+    "country": null,
+    "sex": "M",
+    "premium": false,
+    "summit": false,
+    "created_at": "2018-06-03T23:21:30Z",
+    "updated_at": "2020-11-06T00:00:16Z",
+    "badge_type_id": 0,
+    "weight": 65,
+    "profile_medium": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/31488771/10283851/4/medium.jpg",
+    "profile": "https://dgalywyr863hv.cloudfront.net/pictures/athletes/31488771/10283851/4/large.jpg",
+    "friend": null,
+    "follower": null
+  }
+}

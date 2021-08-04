@@ -29,26 +29,63 @@ export default async function handler(req, res) {
     }
   } else if(req.method === 'POST') {
     console.log("webhook event received!", req.body);
-
     const { db } = await connectToDatabase();
+
+    const requestData = req.body;
+    const objectId = Number(req.body.object_id);
+    const webhookUpdate = req.body.aspect_type;
+
+    if(!webhookUpdate || !objectId || !requestData.owner_id) {
+      return res.status(500).json({ message: 'invalid strava webhook' });
+    }
+  
+    // switch (webhookUpdate) {
+    //   case 'delete':
+    //     // remove activity
+    //     break;
+    //   case 'create':
+    //   case 'update':
+
+    //   default:
+
+    //     break;
+    // }
+
+    if (webhookUpdate === 'delete') {
+      // delete activity
+      await db
+        .collection('activity')
+        .deleteOne({ id: objectId})
+      
+      // delete slack message
+
+      return res.status(200).json({ status: 'deleted' });
+    }
+
+    const query = { object_id: objectId };
+    const update = { $set: requestData };
     await db
       .collection('webhook')
-      .insertOne(req.body)
+      .updateOne(query, update, { upsert: true })
 
-    const token = await getAthleteToken(req.body.owner_id);
+    const token = await getAthleteToken(requestData.owner_id);
 
     // 2. get activity data from strava
-    const activity = await getActivity(req.body.object_id, token.access_token);
+    const activity = await getActivity(objectId, token.access_token);
 
     // 3. create map
-    // const map = await generateMap({ polyline: activity.map.summary_polyline, id: req.body.object_id });
+    // const map = await generateMap({ polyline: activity.map.summary_polyline, id: objectId });
     const map = {};
     const data = { ...activity, map: map.path };
 
     // Save activity data
+    const activityQuery = { id: activity.id };
+    const activityUpdate = { $set: data };
+
     await db
       .collection('activity')
-      .insertOne(data)
+      .updateOne(activityQuery, activityUpdate, { upsert: true })
+
     // 4. send slack message with data and map
     // Create a new instance of the WebClient class with the token read from your environment variable
     const web = new WebClient(process.env.SLACK_TOKEN);
@@ -57,7 +94,7 @@ export default async function handler(req, res) {
 
     await web.chat.postMessage({
       channel: '#general',
-      text: `EVENT_RECEIVED, ${data.map}, ${activity.name}`,
+      text: `EVENT_RECEIVED, ${data.object_id}, ${data.aspect_type}, ${data.map}, ${activity.name}`,
     });
     
     return res.status(200).json({map: map, activity});

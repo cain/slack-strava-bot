@@ -1,6 +1,7 @@
 
 import chromium from 'chrome-aws-lambda'
 
+// https://github.com/mehulmpt/nextjs-puppeteer-aws-s3-screenshot-service/blob/main/api/get-screenshot-image.js
 async function getBrowserInstance() {
   console.log('getBrowserInstance')
 
