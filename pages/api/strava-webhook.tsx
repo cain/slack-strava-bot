@@ -6,12 +6,9 @@ import { getActivity, getAthleteToken } from '../../util/strava';
 export default async function handler(req, res) {
   console.log(req.method)
   if(req.method === 'GET') {
-      // Your verify token. Should be a random string.
+    // Your verify token. Should be a random string.
     const VERIFY_TOKEN = "STRAVA";
-    // Parses the query params
-    let mode = req.query['hub.mode'];
-    let token = req.query['hub.verify_token'];
-    let challenge = req.query['hub.challenge'];
+    const { mode, token, challenge } = req.query;
     // Checks if a token and mode is in the query string of the request
     if (mode && token) {
       // Verifies that the mode and token sent are valid

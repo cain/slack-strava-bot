@@ -6,13 +6,14 @@ export default async function handler(req, res) {
   return exchangeToken(req.query.code)
     .then(async (data) => {
 
-      // save token in db
+      // add athlete_id for indexing
       data.athlete_id = data.athlete.id;
       const { db } = await connectToDatabase();
       const query = { athlete_id: data.athlete_id };
       const update = { $set: data };
       await db
-        .collection('tokens').updateOne(query, update, { upsert: true })
+        .collection('tokens')
+        .updateOne(query, update, { upsert: true })
 
       // msg slack
       await sendMessage({ message: `Athlete ${data.athlete.firstname} has joined the slack channel.` });
