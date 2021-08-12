@@ -1,20 +1,4 @@
-
-interface SlackCommand {
-  token: string;
-  team_id: string;
-  team_domain: string;
-  enterprise_id: string | null;
-  enterprise_name: string | null;
-  channel_id: string;
-  channel_name: string;
-  user_id: string;
-  user_name: string;
-  command: string;
-  text: string;
-  response_url: string;
-  trigger_id: string;
-  api_app_id: string;
-}
+import { SlackCommand } from "../../../typscript/InterfaceSlack";
 
 export default async function handler (req, res) {
   if(req.method === 'POST') {
@@ -24,7 +8,10 @@ export default async function handler (req, res) {
 
     console.log(slackCommand.text);
 
-    res.status(200).json('bip bop bap');
+    res.status(200).json({
+      "response_type": "in_channel",
+      "text": "Slack bot has added to the channel!"
+    });
     return;
   }
 }
