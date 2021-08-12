@@ -1,7 +1,7 @@
-import { getActivity, getAthleteToken } from '../../util/strava.tsx';
 const { WebClient } = require('@slack/web-api');
 const { generateMap } = require('../../util/screenshot');
 import { connectToDatabase } from '../../util/mongodb'
+import { getActivity, getAthleteToken } from '../../util/strava';
 
 export default async function handler(req, res) {
   console.log(req.method)
@@ -38,18 +38,6 @@ export default async function handler(req, res) {
     if(!webhookUpdate || !objectId || !requestData.owner_id) {
       return res.status(500).json({ message: 'invalid strava webhook' });
     }
-  
-    // switch (webhookUpdate) {
-    //   case 'delete':
-    //     // remove activity
-    //     break;
-    //   case 'create':
-    //   case 'update':
-
-    //   default:
-
-    //     break;
-    // }
 
     if (webhookUpdate === 'delete') {
       // delete activity
@@ -75,7 +63,7 @@ export default async function handler(req, res) {
 
     // 3. create map
     // const map = await generateMap({ polyline: activity.map.summary_polyline, id: objectId });
-    const map = {};
+    const map = { path: '' };
     const data = { ...activity, map: map.path };
 
     // Save activity data
@@ -89,12 +77,9 @@ export default async function handler(req, res) {
     // 4. send slack message with data and map
     // Create a new instance of the WebClient class with the token read from your environment variable
     const web = new WebClient(process.env.SLACK_TOKEN);
-    // The current date
-    const currentTime = new Date().toTimeString();
-
     await web.chat.postMessage({
       channel: '#general',
-      text: `EVENT_RECEIVED, ${data.object_id}, ${data.aspect_type}, ${data.map}, ${activity.name}`,
+      text: `EVENT_RECEIVED, ${data.id}, ${data.type}, ${data.map}, ${activity.name}`,
     });
     
     return res.status(200).json({map: map, activity});
