@@ -7,15 +7,19 @@ export default async function handler(req, res) {
   console.log(req.method)
   if(req.method === 'GET') {
     // Your verify token. Should be a random string.
-    const VERIFY_TOKEN = "STRAVA";
-    const { mode, token, challenge } = req.query;
+    const VERIFY_TOKEN = "SLACKBOT";
+    const { query } = req;
+    const challenge = query['hub.challenge'];
+    const mode = query['hub.mode'];
+    const verifyToken = query['hub.verify_token'];
+
     // Checks if a token and mode is in the query string of the request
-    if (mode && token) {
+    if (mode && verifyToken) {
       // Verifies that the mode and token sent are valid
-      if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
+      if (mode === 'subscribe' && verifyToken === VERIFY_TOKEN) {     
         // Responds with the challenge token from the request
         console.log('WEBHOOK_VERIFIED');
-        res.status(200).json({"hub.challenge":challenge});  
+        res.status(200).json({"hub.challenge": challenge});  
       } else {
         // Responds with '403 Forbidden' if verify tokens do not match
         // res.sendStatus(403); 
