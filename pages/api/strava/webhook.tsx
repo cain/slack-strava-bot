@@ -1,7 +1,7 @@
 const { WebClient } = require('@slack/web-api');
 const { generateMap } = require('../../util/screenshot');
-import { connectToDatabase } from '../../util/mongodb'
-import { getActivity, getAthleteToken } from '../../util/strava';
+import { connectToDatabase } from '../../../util/mongodb'
+import { getActivity, getAthleteToken } from '../../../util/strava';
 
 export default async function handler(req, res) {
   console.log(req.method)

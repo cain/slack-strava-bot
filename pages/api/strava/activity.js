@@ -1,4 +1,4 @@
-const { getActivity } = require('../../util/strava');
+const { getActivity } = require('../../../util/strava');
 
 export default async function handler (req, res) {
   res.statusCode = 200
