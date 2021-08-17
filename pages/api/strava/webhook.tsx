@@ -15,7 +15,7 @@ export default async function handler(req, res) {
       if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
         // Responds with the challenge token from the request
         console.log('WEBHOOK_VERIFIED');
-        res.json({"hub.challenge":challenge});  
+        res.status(200).json({"hub.challenge":challenge});  
       } else {
         // Responds with '403 Forbidden' if verify tokens do not match
         // res.sendStatus(403); 
