@@ -1,4 +1,4 @@
-import { exchangeToken } from'../../util/strava.tsx';
+import { exchangeToken } from'../../../util/strava.tsx';
 const { sendMessage } = require('../../../util/slack');
 import { connectToDatabase } from '../../../util/mongodb'
 
