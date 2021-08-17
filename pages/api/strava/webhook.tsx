@@ -1,5 +1,5 @@
 const { WebClient } = require('@slack/web-api');
-const { generateMap } = require('../../util/screenshot');
+const { generateMap } = require('../../../util/screenshot');
 import { connectToDatabase } from '../../../util/mongodb'
 import { getActivity, getAthleteToken } from '../../../util/strava';
 
