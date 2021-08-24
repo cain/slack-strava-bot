@@ -1,6 +1,6 @@
 import { exchangeToken } from'../../../util/strava.tsx';
-const { sendMessage } = require('../../../util/slack');
-import { connectToDatabase } from '../../../util/mongodb'
+import { sendMessage } from '../../../util/slack.tsx';
+import { connectToDatabase } from '../../../util/mongodb';
 
 export default async function handler(req, res) {
   return exchangeToken(req.query.code)

@@ -1,4 +1,5 @@
 const { WebClient } = require('@slack/web-api');
+var axios = require('axios');
 
 export async function sendMessage({ message }) {
   // Create a new instance of the WebClient class with the token read from your environment variable
@@ -10,6 +11,32 @@ export async function sendMessage({ message }) {
     channel: '#general',
     text: `${message}`,
   });
+}
+
+export async function getAuthToken(code: string, redirect_uri: string) {
+  return new Promise<any>((res, rej) => {
+    var config = {
+      method: 'post',
+      url: `https://slack.com/api/oauth.v2.access`,
+      data: { 
+        client_id: process.env.SLACK_CLIENT_ID,
+        secret: process.env.SLACK_SECRET,
+        code,
+        redirect_uri,
+      }
+    };
+
+    console.log(config);
+    
+    axios(config)
+      .then(function (response) {
+        console.log(response);
+        res(response.data);
+      })
+      .catch(function (error) {
+        rej(error);
+      });
+  })
 }
 
 
