@@ -11,8 +11,8 @@ export default function Home({ isConnected, activities }) {
   const router = useRouter()
   const { code, scope, state } = router.query
 
-  const SLACK_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=44322&response_type=code&redirect_uri=${process.env.WEB_URL}?&approval_prompt=force&scope=activity:read_all,activity:read&state=strava`;
-  const STRAVA_AUTH_URL = `https://slack.com/oauth/v2/authorize?client_id=955952242691.2269147690049&scope=channels:read,chat:write,chat:write.public,commands&user_scope=&state=slack`;
+  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=44322&response_type=code&redirect_uri=${process.env.WEB_URL}?&approval_prompt=force&scope=activity:read_all,activity:read&state=strava`;
+  const SLACK_AUTH_URL = `https://slack.com/oauth/v2/authorize?client_id=955952242691.2269147690049&scope=channels:read,chat:write,chat:write.public,commands&user_scope=&state=slack`;
 
   useEffect(() => {
     if (state === 'strava' && code) {
@@ -58,10 +58,10 @@ export default function Home({ isConnected, activities }) {
       <br />
       <br />
       <br />
-      <a href={SLACK_AUTH_URL}>
+      <a href={STRAVA_AUTH_URL}>
         Auth strava
       </a>
-      <a href={STRAVA_AUTH_URL}>
+      <a href={SLACK_AUTH_URL}>
         <img alt="Add to Slack" height="40" width="139" src="https://platform.slack-edge.com/img/add_to_slack.png" srcSet="https://platform.slack-edge.com/img/add_to_slack.png 1x, https://platform.slack-edge.com/img/add_to_slack@2x.png 2x" />
       </a>
 
