@@ -7,7 +7,7 @@ export default async function handler (req, res) {
     const { db } = await connectToDatabase();
     console.log(req.body);
 
-    const teamId = req.body.team_id;
+    const teamId = req.body.channel_id;
 
     const slackCommand: SlackCommand = req.body;
 
