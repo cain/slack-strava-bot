@@ -26,6 +26,7 @@ export default async function handler(req, res) {
         .collection('tokens')
         .updateOne(query, update, { upsert: true })
         
+      console.log({ slackChannelId })
       // msg slack
       await sendMessage({ channel: slackChannelId, message: `Athlete ${data.athlete.firstname} has joined the slack channel.` });
 
