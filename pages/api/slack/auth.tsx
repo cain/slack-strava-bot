@@ -3,12 +3,12 @@ import { connectToDatabase } from '../../../util/mongodb'
 import { getAuthToken } from '../../../util/slack';
 
 export default async function handler (req: NextApiRequest, res: NextApiResponse) {
-  if(req.method === 'GET') {
+  if(req.method === 'GET' && req.query.code) {
     const { db } = await connectToDatabase();
 
     const code = `${req.query.code}`;
 
-    const token = await getAuthToken(code, 'https://slack-strava-bot.vercel.app/');
+    const token = await getAuthToken(code, process.env.WEB_URL || 'https://slack-strava-bot.vercel.app/');
 
     res.status(200).json(token);
 

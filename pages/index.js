@@ -9,18 +9,29 @@ export default function Home({ isConnected, activities }) {
   const [status, setStatus] = useState(false);
 
   const router = useRouter()
-  const { code, scope, state } = router.query
+  const { code, scope, state, slack_team_id } = router.query
 
-  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=44322&response_type=code&redirect_uri=${process.env.WEB_URL}?&approval_prompt=force&scope=activity:read_all,activity:read&state=strava`;
+  const STRAVA_AUTH_URL = `https://www.strava.com/oauth/authorize?client_id=44322&response_type=code&redirect_uri=${process.env.WEB_URL}?&approval_prompt=force&scope=activity:read_all,activity:read&state=${slack_team_id}`;
   const SLACK_AUTH_URL = `https://slack.com/oauth/v2/authorize?client_id=955952242691.2269147690049&scope=channels:read,chat:write,chat:write.public,commands&user_scope=&state=slack`;
 
   useEffect(() => {
-    if (state === 'strava' && code) {
+    if(state === 'slack' && code) {
+      setStatus('authorizing');
+      axios.get('/api/slack/auth', { params: { code } })
+        .then(() => {
+          setStatus('success');
+          router.replace('/');
+        })
+        .catch(() => {
+          setStatus('fail');
+          router.replace('/');
+        })
+    } else if (code) {
       setStatus('authorizing');
       // Check scopes of auth return
       if(scope.indexOf('read,activity:read') > -1) {
         // Exchange token for long lasting token
-        axios.get('/api/strava/auth', { params: { code } })
+        axios.get('/api/strava/auth', { params: { code, state } })
           .then(() => {
             setStatus('success');
             router.replace('/');
@@ -32,17 +43,6 @@ export default function Home({ isConnected, activities }) {
       } else {
         setStatus('invalid-scope');
       }
-    } else if(state === 'slack' && code) {
-      setStatus('authorizing');
-      axios.get('/api/slack/auth', { params: { code } })
-        .then(() => {
-          setStatus('success');
-          router.replace('/');
-        })
-        .catch(() => {
-          setStatus('fail');
-          router.replace('/');
-        })
     }
   }, [code, router, scope, state])
 

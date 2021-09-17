@@ -1,14 +1,14 @@
 const { WebClient } = require('@slack/web-api');
 var axios = require('axios');
 
-export async function sendMessage({ message }) {
+export async function sendMessage({ message, channel }) {
   // Create a new instance of the WebClient class with the token read from your environment variable
   const web = new WebClient(process.env.SLACK_TOKEN);
   // The current date
   // const currentTime = new Date().toTimeString();
 
   await web.chat.postMessage({
-    channel: '#general',
+    channel: channel ? channel : '#general',
     text: `${message}`,
   });
 }

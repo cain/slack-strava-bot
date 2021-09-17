@@ -75,14 +75,16 @@ export default async function handler(req, res) {
       .collection('activity')
       .updateOne(activityQuery, activityUpdate, { upsert: true })
 
-    // 4. send slack message with data and map
-    // Create a new instance of the WebClient class with the token read from your environment variable
-    const web = new WebClient(process.env.SLACK_TOKEN);
-    await web.chat.postMessage({
-      channel: '#general',
-      text: `EVENT_RECEIVED, id: ${data.id}, aspect_type: ${webhookUpdate}, type: ${data.type}, map: ${data.map}, name: ${activity.name}`,
-    });
-    
+    if(webhookUpdate === 'create') {
+      // 4. send slack message with data and map
+      // Create a new instance of the WebClient class with the token read from your environment variable
+      const web = new WebClient(process.env.SLACK_TOKEN);
+      await web.chat.postMessage({
+        channel: '#general',
+        text: `EVENT_RECEIVED, id: ${data.id}, aspect_type: ${webhookUpdate}, type: ${data.type}, map: ${data.map}, name: ${activity.name}`,
+      });
+    }
+
     return res.status(200).json({map: map, activity});
   }
 
