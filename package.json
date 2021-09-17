@@ -11,10 +11,10 @@
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "@slack/web-api": "^6.2.4",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "chrome-aws-lambda": "^10.1.0",
     "mapbox-gl": "^2.3.1",
-    "next": "^11.1.0",
+    "next": "^11.1.1",
     "puppeteer": "^10.1.0",
     "puppeteer-core": "^10.1.0",
     "react": "17.0.2",
