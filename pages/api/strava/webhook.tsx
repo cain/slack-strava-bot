@@ -29,13 +29,13 @@ export default async function handler(req, res) {
       res.json('No token supplied')
     }
   } else if(req.method === 'POST') {
-    console.log("webhook event received!", req.body);
+    // console.log("webhook event received!", req.body);
     const { db } = await connectToDatabase();
 
     const requestData = req.body;
-    const objectId = Number(req.body.object_id);
-    const webhookUpdate = req.body.aspect_type;
-
+    const objectId = Number(requestData.object_id);
+    const webhookUpdate = requestData.aspect_type;
+    console.log(requestData.aspect_type, webhookUpdate, objectId, requestData.owner_id)
     if(!webhookUpdate || !objectId || !requestData.owner_id) {
       return res.status(500).json({ message: 'invalid strava webhook' });
     }
@@ -76,13 +76,22 @@ export default async function handler(req, res) {
       .updateOne(activityQuery, activityUpdate, { upsert: true })
 
     if(webhookUpdate === 'create') {
-      // 4. send slack message with data and map
-      // Create a new instance of the WebClient class with the token read from your environment variable
-      const web = new WebClient(process.env.SLACK_TOKEN);
-      await web.chat.postMessage({
-        channel: '#general',
-        text: `EVENT_RECEIVED, id: ${data.id}, aspect_type: ${webhookUpdate}, type: ${data.type}, map: ${data.map}, name: ${activity.name}`,
-      });
+      try {
+        const cursor = await db.collection('athlete-slack-channels').find({ athlete_id: requestData.owner_id });
+        await cursor.forEach(async (dbDocument) => {
+          console.log({ dbDocument: dbDocument })
+          // 4. send slack message with data and map
+          // Create a new instance of the WebClient class with the token read from your environment variable
+          const web = new WebClient(process.env.SLACK_TOKEN);
+          await web.chat.postMessage({
+            channel: dbDocument.channel_id,
+            text: `EVENT_RECEIVED, id: ${data.id}, aspect_type: ${webhookUpdate}, type: ${data.type}, map: ${data.map}, name: ${activity.name}`,
+          });
+        });
+    
+      } finally {
+        // await client.close();
+      }
     }
 
     return res.status(200).json({map: map, activity});
