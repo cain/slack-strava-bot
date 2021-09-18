@@ -65,7 +65,7 @@ export async function refreshToken(tokenObject) {
         const query = { athlete_id: data.athlete_id };
         const update = { $set: data };
         await db
-          .collection('tokens').updateOne(query, update, { upsert: true })
+          .collection('strava-tokens').updateOne(query, update, { upsert: true })
 
         res(data);
       })
@@ -116,7 +116,7 @@ export function getAthleteToken(athleteId: number) {
       const { db } = await connectToDatabase();
 
       let token = await db
-        .collection('tokens')
+        .collection('strava-tokens')
         .findOne({ athlete_id: Number(athleteId) });
 
       // refresh token
