@@ -43,7 +43,7 @@ export default async function handler(req, res) {
     if (webhookUpdate === 'delete') {
       // delete activity
       await db
-        .collection('activity')
+        .collection('strava-activity')
         .deleteOne({ id: objectId})
       
       // delete slack message
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
     const query = { object_id: objectId };
     const update = { $set: requestData };
     await db
-      .collection('webhook')
+      .collection('strava-webhook')
       .updateOne(query, update, { upsert: true })
 
     const token = await getAthleteToken(requestData.owner_id);
@@ -77,7 +77,7 @@ export default async function handler(req, res) {
 
     if(webhookUpdate === 'create') {
       try {
-        const cursor = await db.collection('athlete-slack-channels').find({ athlete_id: requestData.owner_id });
+        const cursor = await db.collection('slack-athelete-channels').find({ athlete_id: requestData.owner_id });
         await cursor.forEach(async (dbDocument) => {
           console.log({ dbDocument: dbDocument })
           // 4. send slack message with data and map
