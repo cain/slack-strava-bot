@@ -14,7 +14,7 @@ export default async function handler(req, res) {
       const { db } = await connectToDatabase();
 
       // Create index for the slack channel and strava athlete
-      const indexData = { strava_athlete_id: data.athlete_id, slack_channel_id: slackChannelId, slack_user_id: userId, slack_user_name: userName };
+      const indexData = { strava_athlete_id: data.athlete_id, slack_channel_id: slackChannelId, slack_user_id: userId, slack_user_name: userName, enabled: true };
       const query1 = { strava_athlete_id: data.athlete_id, slack_channel_id: slackChannelId, slack_user_id: userId };
       const update1 = { $set: indexData };
       await db
