@@ -72,7 +72,7 @@ export default async function handler(req, res) {
     const activityUpdate = { $set: data };
 
     await db
-      .collection('activity')
+      .collection('strava-activity')
       .updateOne(activityQuery, activityUpdate, { upsert: true })
 
     if(webhookUpdate === 'create') {

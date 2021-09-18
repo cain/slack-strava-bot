@@ -78,7 +78,7 @@ export default function Home({ isConnected, activities }) {
 export async function getServerSideProps(context) {
   const { client } = await connectToDatabase()
   // console.log(client)
-  const cursor = await client.db("strava-bot").collection('activity').find({});
+  const cursor = await client.db("strava-bot").collection('strava-activity').find({});
   const allValues = await cursor.toArray();
   await cursor.close();
 
