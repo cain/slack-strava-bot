@@ -16,36 +16,30 @@ export default async function handler (req, res) {
 
     const { db } = await connectToDatabase();
 
-    if (slackCommand.text.indexOf('stop')) {
+    if (slackCommand.text.indexOf('stop') > -1) {
       res.status(200).json({
         "response_type": "in_channel",
         "text": "🏃‍♀️ Stopping bot",
       });
       // Save it only once per channel so we dont flood db
-      const query = { channel_id: slackCommand.channel_id, user_id: userId };
-      const update = { $set: { enabled: false } };
       await db
         .collection('slack-athelete-channels')
-        .updateOne(query, update, { upsert: true })
+        .updateOne({ channel_id: slackCommand.channel_id, user_id: userId }, { $set: { enabled: false } }, { upsert: true })
       return
-    } else if (slackCommand.text.indexOf('start')) {
+    } else if (slackCommand.text.indexOf('start') > -1) {
       res.status(200).json({
         "response_type": "in_channel",
         "text": '🏃‍♀️ Starting bot',
       });
-      // const { db } = await connectToDatabase();
-      // Save it only once per channel so we dont flood db
-      const query = { channel_id: slackCommand.channel_id, user_id: userId };
-      const update = { $set: { enabled: true } };
       await db
         .collection('slack-athelete-channels')
-        .updateOne(query, update, { upsert: true })
+        .updateOne({ channel_id: slackCommand.channel_id, user_id: userId }, { $set: { enabled: true } }, { upsert: true })
       return
     } else {
       // Return 200 first because slack gets grumpy if we take a while
       res.status(200).json({
         "response_type": "in_channel",
-        "text": "🏃‍♀️ Click the link to add your Strava to this channel!" + STRAVA_AUTH_URL,
+        "text": "🏃‍♀️ Click the link to add your Strava to this channel! " + STRAVA_AUTH_URL,
       });
     }
 
