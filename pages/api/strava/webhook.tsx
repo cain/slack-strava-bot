@@ -65,7 +65,7 @@ export default async function handler(req, res) {
     // 3. create map
     // const map = await generateMap({ polyline: activity.map.summary_polyline, id: objectId });
     const map = { path: '' };
-    const data = { ...activity, map: map.path };
+    const data = { ...activity, mapImage: map.path };
 
     // Save activity data
     const activityQuery = { id: activity.id };

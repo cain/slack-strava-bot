@@ -20,7 +20,7 @@ export default function Home() {
 
     var mapboxPolyline = require('@mapbox/polyline');
     // returns an array of lat, lon pairs
-    const pairs = mapboxPolyline.toGeoJSON(polyline);
+    const pairs = mapboxPolyline.toGeoJSON(decodeURI(polyline));
     // const pairs = polyline.toGeoJSON('vw}mEyuvy[Ok@OmA?UBGLEJA|AIVK^e@xCuClAcAVGzBHnBBPJLf@Th@f@d@d@Vd@@vD`@`@MZc@Ns@By@Eg@[_@}BOe@QsAq@QEs@Ac@McAiAo@yA_@i@MOK@OHGJGl@Q`AoAlC?ZL`@nA?b@Bl@JpB@FJNn@Rd@z@r@NF`@AdALpATd@?TMLQPi@D_@?u@I]GMa@We@G}@Gc@M}Aw@sAEc@Si@q@Yc@Yu@We@[_@IAOFGHMfAOx@oAdCAJDTA`@gCzBa@b@eBdBa@LqAF]?GEIOEk@Cu@BcANi@ZU^Sf@Mh@@ZTZf@^|@\\ZJBBAPO`BcBPW`@SfCPl@Gl@?^BPTTz@\\\\b@Z`@NX?x@JhBXP?VKVg@Fi@Bu@Ko@W[[GaAAg@KiAu@g@WqAAYOmA_Bg@aAiAyAWa@WW_@Qe@M_BWUIc@w@e@k@Qa@EUEgAOc@g@s@QIc@Ky@Gc@Je@`@KRSp@El@@NLj@T\\PN`@RPD`ABRAb@Kd@[To@Bu@Km@[o@e@a@]Im@Gg@?e@HWNMNUfACn@Jv@LN');
 
     const maxX = pairs.coordinates.reduce((acc, val) => (val[0] > acc || !acc) ? val[0] : acc, undefined)
@@ -30,7 +30,6 @@ export default function Home() {
 
     // m = (x1+x2/2, y1+y2/2)
     const midpoint = [(minX+maxX)/2, (minY+maxY)/2];
-    debugger;
 
     mapboxgl.accessToken = 'pk.eyJ1IjoiY2FpbmhhbGwiLCJhIjoiY2tyYjY4bDB5MzR4cDMwdGNya3l2amVxOSJ9.FQ5rgpmZzrxZMB8ChU9ISQ';
     var map = new mapboxgl.Map({
