@@ -18,11 +18,12 @@ async function getBrowserInstance() {
 	}
 
 	return chromium.puppeteer.launch({
-		args: chromium.args,
-		executablePath,
-		headless: chromium.headless,
-		ignoreHTTPSErrors: true
-	})
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath,
+    headless: chromium.headless,
+    ignoreHTTPSErrors: true,
+  });
 }
 // 87pSozfHW7XgSpykte65jFhBbh8n8ze3pcnCMghjYTfocScb8TauVYXNeCUxouyPefKWx4uRD9ufTEsSxUoqyE4MMFo11oJ
 export function generateMap({ polyline, id }: { polyline: string, id: number }) {
@@ -48,7 +49,14 @@ export function generateMap({ polyline, id }: { polyline: string, id: number }) 
       console.log('try catch')
 
       let browser = null
-      browser = await getBrowserInstance()
+      // browser = await getBrowserInstance()
+      browser = await chromium.puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath,
+        headless: chromium.headless,
+        ignoreHTTPSErrors: true,
+      });
       console.log('init instance')
       const page = await browser.newPage();
     
