@@ -11,53 +11,11 @@ const S3 = new AWS.S3({
 	}
 })
 
-
-// https://github.com/mehulmpt/nextjs-puppeteer-aws-s3-screenshot-service/blob/main/api/get-screenshot-image.js
-async function getBrowserInstance() {
-  console.log('getBrowserInstance')
-
-	const executablePath = await chromium.executablePath
-
-	if (!executablePath) {
-		// running locally
-		const puppeteer = require('puppeteer')
-		return puppeteer.launch({
-			args: chromium.args,
-			headless: true,
-			ignoreHTTPSErrors: true
-		})
-	}
-
-	return chromium.puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath,
-    headless: chromium.headless,
-    ignoreHTTPSErrors: true,
-  });
-}
 // 87pSozfHW7XgSpykte65jFhBbh8n8ze3pcnCMghjYTfocScb8TauVYXNeCUxouyPefKWx4uRD9ufTEsSxUoqyE4MMFo11oJ
 export function generateMap({ polyline, id }: { polyline: string, id: number }) {
   let browser = null
   return new Promise<{ path: string }>(async (res, rej) => {
     try {
-      // let chrome: any = {};
-      // const config = {
-      //   headless: true,
-      // }
-      // let puppeteer;
-      // if (process.env.APP_ENV !== 'local') {
-      //   // running on the Vercel platform.
-      //   chrome = require('chrome-aws-lambda');
-      //   puppeteer = require('puppeteer-core');
-      // } else {
-      //   // running locally.
-      //   puppeteer = require('puppeteer');
-      // }
-      // const browser = await puppeteer.launch({
-      //   args: [...chrome.args, '--hide-scrollbars', '--disable-web-security'],
-      //   executablePath: await chrome.executablePath,
-      // });
       console.log('try catch')
 
       // browser = await getBrowserInstance()
